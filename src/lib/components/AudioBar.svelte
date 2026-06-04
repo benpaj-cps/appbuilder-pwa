@@ -122,8 +122,8 @@ TODO:
         <div class="audio-control-buttons">
             <RepeatButton
                 color="{iconColor},"
-                // onclick={() => playMode.next($refs.hasAudio?.timingFile)}
-                onclick={() => playMode.next(true)}
+                onclick={() => playMode.next($refs.hasAudio?.timingFile)}
+                // onclick={() => playMode.next(true)}
                 // onclick={() => console.log($refs.hasAudio?.timingFile)}
                 state={$playMode.mode}
             />
