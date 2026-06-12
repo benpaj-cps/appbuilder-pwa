@@ -189,17 +189,22 @@ export async function skip(direction: number) {
             return;
         }
 
+
+        console.log(`(1) skip: currentAudioPlayer: progress is now ${currentAudioPlayer.progress}`);
         for (let i = 1; i < currentAudioPlayer.headingMarkers.length; i++) {
             const marker = currentAudioPlayer.headingMarkers[i];
             if (currentAudioPlayer.progress < marker + AUDIO_SEEK_THRESHOLD) {
                 if (direction < 0) {
+                    console.log(`skip: seeking to previous heading`)
                     seek(currentAudioPlayer.headingMarkers[i - 1]);
                 } else if (
                     i < currentAudioPlayer.headingMarkers.length - 1 &&
-                    currentAudioPlayer.progress > marker
+                    currentAudioPlayer.progress >= marker
                 ) {
+                    console.log(`skip: seeking to next heading`)
                     seek(currentAudioPlayer.headingMarkers[i + 1]);
                 } else {
+                    console.log(`skip: seeking to current heading`)
                     seek(marker);
                 }
                 if (wasPlaying) {
@@ -224,10 +229,10 @@ function getHeadingMarkers() {
     headings.forEach((h) => {
         let next = nextElementDFS(h);
         while (next && !next?.getAttribute('data-verse')) {
-            console.log(`searching ${next.outerHTML}...`);
+            // console.log(`searching ${next.outerHTML}...`);
             next = nextElementDFS(next);
         }
-        console.log(`found ${next}`);
+        // console.log(`found ${next}`);
 
         // If defined this is the first verse immediately after the heading
         const verse = next?.getAttribute('data-verse');
@@ -335,6 +340,7 @@ export async function seekOffset(offset: number) {
     }
 }
 export function seek(position: number) {
+    console.log(`seeking to position ${position}`);
     const playing = currentAudioPlayer?.playing;
     pause();
     if (currentAudioPlayer?.audio) {
@@ -344,9 +350,11 @@ export function seek(position: number) {
     }
     const timing = getCurrentVerseTiming();
     if (currentAudioPlayer && timing) {
+        console.log(`setting audioPlayer progress to ${position}`);
         currentAudioPlayer.progress = position;
         playMode.set({ ...(currentPlayMode ?? { mode: defaultPlayMode.mode }), range: timing });
         audioPlayerStore.set(currentAudioPlayer);
+        console.log(`(2) seek: currentAudioPlayer: progress is now ${currentAudioPlayer.progress}`);
     }
     if (playing === true) {
         play();
