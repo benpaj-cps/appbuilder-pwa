@@ -458,7 +458,7 @@ async function updateTime() {
     if (!currentAudioPlayer.timing) {
         audioPlayerStore.set(currentAudioPlayer);
     }
-    if (currentAudioPlayer.timing) {
+    if (currentAudioPlayer.hasPlayed && currentAudioPlayer.timing) {
         updateHighlights();
     }
     await handlePlayMode();
@@ -493,7 +493,12 @@ export function play() {
     if (!currentAudioPlayer?.loaded) {
         return;
     }
+
+
     if (!currentAudioPlayer.playing) {
+        if (!currentAudioPlayer.hasPlayed) {
+            currentAudioPlayer.hasPlayed = true;
+        }
         currentAudioPlayer.audio?.play();
         currentAudioPlayer.playStart = Date.now();
         logAudioPlay(currentAudioPlayer);
