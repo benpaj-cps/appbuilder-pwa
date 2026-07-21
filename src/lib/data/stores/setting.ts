@@ -2,6 +2,7 @@ import config, { scriptureConfig } from '$assets/config';
 import type { FeatureConfig } from '$config';
 import { getDefaultLanguage } from '$lib/data/language';
 import { persistedLocal } from '$lib/data/stores/storage';
+import { isSAB } from '$lib/scripts/configUtils';
 import { derived, readable } from 'svelte/store';
 
 export const SettingsCategory = {
